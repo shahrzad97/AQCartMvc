@@ -1,0 +1,66 @@
+﻿@model AQCartMvc.Models.CheckoutInput
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2>Checkout</h2>
+
+<form asp-controller="Checkout"
+      asp-action="Index"
+      method="post">
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>First Name</label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Last Name</label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-2">
+        <input asp-for="NeedInvoice" class="form-check-input" />
+        <label class="form-check-label">
+            Request receipt (invoice)
+        </label>
+    </div>
+
+    <div class="form-check mb-3">
+        <!-- IMPORTANT: hidden input -->
+        <input type="hidden" name="AcceptPrivacy" value="false" />
+
+        <!-- checkbox -->
+        <input asp-for="AcceptPrivacy"
+               class="form-check-input"
+               value="true" />
+
+        <label class="form-check-label">
+            I accept the privacy policy
+        </label>
+
+        <span asp-validation-for="AcceptPrivacy" class="text-danger"></span>
+    </div>
+
+
+
+    <div class="mb-3">
+        <strong>Total: € @Model.Total.ToString("0.00")</strong>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Confirm Order
+    </button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,45 @@
+﻿@model List<AQCartMvc.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h2>Products</h2>
+
+@if (!Model.Any())
+{
+    <p>No products available.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price (€)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Price.ToString("0.00")</td>
+                    <td>
+                        <form asp-controller="Cart"
+                              asp-action="Add"
+                              method="post"
+                              style="display:inline;">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Add to cart
+                            </button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
