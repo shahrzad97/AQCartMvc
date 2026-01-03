@@ -26,6 +26,22 @@
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
 
+    <!-- COUPON -->
+    <div class="mb-3">
+        <label>Coupon code</label>
+        <div class="input-group">
+            <input asp-for="CouponCode" class="form-control" />
+            <button type="submit"
+                    name="action"
+                    value="applyCoupon"
+                    class="btn btn-outline-secondary">
+                Apply
+            </button>
+        </div>
+        <span asp-validation-for="CouponCode" class="text-danger"></span>
+    </div>
+
+
     <div class="form-check mb-2">
         <input asp-for="NeedInvoice" class="form-check-input" />
         <label class="form-check-label">
@@ -33,6 +49,7 @@
         </label>
     </div>
 
+   
     <div class="form-check mb-3">
         <input asp-for="AcceptPrivacy" class="form-check-input" />
         <label class="form-check-label">
@@ -41,7 +58,16 @@
         <span asp-validation-for="AcceptPrivacy" class="text-danger"></span>
     </div>
 
-    <p><strong>Total: € @Model.Total.ToString("0.00")</strong></p>
+    <p><strong>Total:</strong> € @Model.Total.ToString("0.00")</p>
+
+    @if (Model.Discount > 0)
+    {
+        <p class="text-success">
+            Discount: -€ @Model.Discount.ToString("0.00")
+        </p>
+    }
+
+    <p><strong>Final total:</strong> € @Model.FinalTotal.ToString("0.00")</p>
 
     <button type="submit" class="btn btn-primary">
         Pay with Stripe

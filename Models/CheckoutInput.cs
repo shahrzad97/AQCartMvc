@@ -15,9 +15,14 @@ namespace AQCartMvc.Models
 
         public bool NeedInvoice { get; set; }
 
-        [Required(ErrorMessage = "You must accept the privacy policy")]
         public bool AcceptPrivacy { get; set; }
 
+        // 🔹 PART C
+        public string? CouponCode { get; set; }
+
+        // totals
         public decimal Total { get; set; }
+        public decimal Discount { get; set; }
+        public decimal FinalTotal { get; set; }
     }
 }
