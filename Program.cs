@@ -1,5 +1,7 @@
 ﻿using AQCartMvc.Data;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,9 @@ builder.Services.AddSession(options =>
 });
 
 var app = builder.Build();
+StripeConfiguration.ApiKey =
+    builder.Configuration["Stripe:SecretKey"];
+
 
 if (!app.Environment.IsDevelopment())
 {

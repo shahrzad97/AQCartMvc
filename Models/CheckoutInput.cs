@@ -13,13 +13,11 @@ namespace AQCartMvc.Models
         [Required]
         public string LastName { get; set; } = string.Empty;
 
-        // Mandatory receipt request (boolean is fine)
         public bool NeedInvoice { get; set; }
 
-        // Privacy MUST be accepted
+        [Required(ErrorMessage = "You must accept the privacy policy")]
         public bool AcceptPrivacy { get; set; }
 
-        // Display only
         public decimal Total { get; set; }
     }
 }

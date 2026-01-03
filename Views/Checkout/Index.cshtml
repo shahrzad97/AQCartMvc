@@ -6,9 +6,8 @@
 
 <h2>Checkout</h2>
 
-<form asp-controller="Checkout"
-      asp-action="Index"
-      method="post">
+<form asp-action="CreateStripeSession" method="post">
+
     <div class="mb-3">
         <label>Email</label>
         <input asp-for="Email" class="form-control" />
@@ -35,29 +34,17 @@
     </div>
 
     <div class="form-check mb-3">
-        <!-- IMPORTANT: hidden input -->
-        <input type="hidden" name="AcceptPrivacy" value="false" />
-
-        <!-- checkbox -->
-        <input asp-for="AcceptPrivacy"
-               class="form-check-input"
-               value="true" />
-
+        <input asp-for="AcceptPrivacy" class="form-check-input" />
         <label class="form-check-label">
             I accept the privacy policy
         </label>
-
         <span asp-validation-for="AcceptPrivacy" class="text-danger"></span>
     </div>
 
+    <p><strong>Total: € @Model.Total.ToString("0.00")</strong></p>
 
-
-    <div class="mb-3">
-        <strong>Total: € @Model.Total.ToString("0.00")</strong>
-    </div>
-
-    <button type="submit" class="btn btn-success">
-        Confirm Order
+    <button type="submit" class="btn btn-primary">
+        Pay with Stripe
     </button>
 </form>
 

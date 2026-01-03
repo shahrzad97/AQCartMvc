@@ -1,104 +1,77 @@
-﻿using AQCartMvc.Data;
-using AQCartMvc.Helpers;
+﻿using Microsoft.AspNetCore.Mvc;
+using AQCartMvc.ViewModels;
 using AQCartMvc.Models;
-using Microsoft.AspNetCore.Mvc;
+using AQCartMvc.Helpers;
+using Stripe.Checkout;
 
-namespace AQCartMvc.Controllers
+public class CheckoutController : Controller
 {
-    public class CheckoutController : Controller
+    private const string CART_KEY = "CART";
+
+    [HttpGet]
+    public IActionResult Index()
     {
-        private readonly AppDbContext _db;
-        private const string CART_KEY = "CART";
+        var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
 
-        public CheckoutController(AppDbContext db)
+        if (cart == null || !cart.Any())
+            return RedirectToAction("Index", "Cart");
+
+        var model = new CheckoutInput
         {
-            _db = db;
+            Total = cart.Sum(i => i.UnitPrice * i.Quantity)
+        };
+
+        return View(model);
+    }
+
+    // ✅ THIS is the ONLY submit action
+    [HttpPost]
+    public IActionResult CreateStripeSession(CheckoutInput model)
+    {
+        var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
+
+        if (cart == null || !cart.Any())
+            return RedirectToAction("Index", "Cart");
+
+        // 🔴 IMPORTANT: validation FIRST
+        if (!ModelState.IsValid)
+        {
+            model.Total = cart.Sum(i => i.UnitPrice * i.Quantity);
+            return View("Index", model); // back to checkout page
         }
 
-        // =========================
-        // STEP 1 — SHOW CHECKOUT
-        // =========================
-        [HttpGet]
-        public IActionResult Index()
+        // ===============================
+        // STRIPE SESSION (sandbox)
+        // ===============================
+        var options = new SessionCreateOptions
         {
-            var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
-            if (cart == null || !cart.Any())
-                return RedirectToAction("Index", "Cart");
-
-            var model = new CheckoutInput
+            PaymentMethodTypes = new List<string> { "card" },
+            LineItems = cart.Select(item => new SessionLineItemOptions
             {
-                Total = cart.Sum(i => i.UnitPrice * i.Quantity)
-            };
-
-            // 👇 IMPORTANT FIX
-            return View("Index", model);
-        }
-
-        // =========================
-        // STEP 2 — CONFIRM ORDER
-        // =========================
-        [HttpPost]
-        public IActionResult Index(CheckoutInput model)
-        {
-            var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
-            if (cart == null || !cart.Any())
-                return RedirectToAction("Index", "Cart");
-
-            if (!ModelState.IsValid)
-            {
-                model.Total = cart.Sum(i => i.UnitPrice * i.Quantity);
-
-                // 👇 IMPORTANT FIX
-                return View("Index", model);
-            }
-
-            var total = cart.Sum(i => i.UnitPrice * i.Quantity);
-
-            var order = new Order
-            {
-                CreatedAt = DateTime.Now,
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                NeedInvoice = model.NeedInvoice,
-                AcceptPrivacy = model.AcceptPrivacy,
-                TotalBeforeDiscount = total,
-                DiscountAmount = 0,
-                TotalFinal = total,
-                PaymentType = "Mock",
-                PaymentStatus = "Confirmed"
-            };
-
-            _db.Orders.Add(order);
-            _db.SaveChanges();
-
-            foreach (var item in cart)
-            {
-                _db.OrderItems.Add(new OrderItem
+                Quantity = item.Quantity,
+                PriceData = new SessionLineItemPriceDataOptions
                 {
-                    OrderId = order.Id,
-                    ProductId = item.ProductId,
-                    ProductName = item.ProductName,
-                    UnitPrice = item.UnitPrice,
-                    Quantity = item.Quantity,
-                    RowTotal = item.UnitPrice * item.Quantity
-                });
-            }
+                    Currency = "eur",
+                    UnitAmount = (long)(item.UnitPrice * 100),
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = item.ProductName
+                    }
+                }
+            }).ToList(),
+            Mode = "payment",
+            SuccessUrl = Url.Action("Success", "Checkout", null, Request.Scheme),
+            CancelUrl = Url.Action("Index", "Checkout", null, Request.Scheme)
+        };
 
-            _db.SaveChanges();
+        var service = new SessionService();
+        Session session = service.Create(options);
 
-            HttpContext.Session.Remove(CART_KEY);
+        return Redirect(session.Url);
+    }
 
-            return RedirectToAction("Success");
-        }
-
-        // =========================
-        // STEP 3 — SUCCESS PAGE
-        // =========================
-        [HttpGet]
-        public IActionResult Success()
-        {
-            return View();
-        }
+    public IActionResult Success()
+    {
+        return View();
     }
 }
