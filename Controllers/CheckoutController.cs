@@ -8,6 +8,7 @@ namespace AQCartMvc.Controllers
     public class CheckoutController : Controller
     {
         private const string CART_KEY = "CART";
+        private const string INVOICE_KEY = "INVOICE_REQUESTED";
 
         // ===============================
         // GET: Checkout
@@ -69,7 +70,7 @@ namespace AQCartMvc.Controllers
             model.Discount = discount;
             model.FinalTotal = total - discount;
 
-            // 👉 Apply coupon only (no Stripe yet)
+            // 👉 APPLY COUPON ONLY
             if (Request.Form["action"] == "applyCoupon")
             {
                 return View("Index", model);
@@ -82,6 +83,9 @@ namespace AQCartMvc.Controllers
             {
                 return View("Index", model);
             }
+
+            // ✅ STORE INVOICE REQUEST IN SESSION (NOT TempData)
+            HttpContext.Session.SetObject(INVOICE_KEY, model.NeedInvoice);
 
             // =========================
             // STRIPE — USE FINAL TOTAL
@@ -121,6 +125,14 @@ namespace AQCartMvc.Controllers
         // ===============================
         public IActionResult Success()
         {
+            bool invoiceRequested =
+                HttpContext.Session.GetObject<bool?>(INVOICE_KEY) ?? false;
+
+            ViewBag.InvoiceRequested = invoiceRequested;
+
+            // optional: clear after use
+            HttpContext.Session.Remove(INVOICE_KEY);
+
             return View();
         }
     }

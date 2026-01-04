@@ -1,13 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Order Completed";
+    bool invoiceRequested = ViewBag.InvoiceRequested ?? false;
 }
 
 <h2>Order completed</h2>
 
-<p>
-    Thank you for your order.
-    Your request has been successfully registered.
-</p>
+<p>Thank you for your order.</p>
+
+@if (invoiceRequested)
+{
+    <div class="alert alert-info">
+        You requested an invoice for this order.
+        Our accounting department will process it.
+    </div>
+}
+else
+{
+    <div class="alert alert-secondary">
+        No invoice was requested for this order.
+    </div>
+}
 
 <a asp-controller="Products" asp-action="Index" class="btn btn-primary">
     Continue shopping
