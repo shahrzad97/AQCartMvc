@@ -14,55 +14,84 @@
 }
 else
 {
-    <table class="table table-bordered align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>Product</th>
-                <th class="text-end">Unit Price</th>
-                <th class="text-center">Quantity</th>
-                <th class="text-end">Total</th>
-                <th class="text-center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <!-- ✅ RESPONSIVE WRAPPER -->
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
                 <tr>
-                    <td>@item.ProductName</td>
-                    <td class="text-end">@item.UnitPrice.ToString("0.00") €</td>
-                    <td class="text-center">
-                        <form asp-action="Decrease" method="post" class="d-inline">
-                            <input type="hidden" name="productId" value="@item.ProductId" />
-                            <button class="btn btn-sm btn-outline-secondary">−</button>
-                        </form>
+                    <th>Product</th>
 
-                        <span class="mx-2">@item.Quantity</span>
+                    <!-- Hide on small screens -->
+                    <th class="text-end d-none d-md-table-cell">Unit Price</th>
 
-                        <form asp-action="Add" method="post" class="d-inline">
-                            <input type="hidden" name="productId" value="@item.ProductId" />
-                            <button class="btn btn-sm btn-outline-secondary">+</button>
-                        </form>
-                    </td>
-                    <td class="text-end">
-                        @(item.UnitPrice* item.Quantity).ToString("0.00") €
-                    </td>
-                    <td class="text-center">
-                        <form asp-action="Remove" method="post">
-                            <input type="hidden" name="productId" value="@item.ProductId" />
-                            <button class="btn btn-sm btn-danger">Remove</button>
-                        </form>
-                    </td>
+                    <th class="text-center">Quantity</th>
+
+                    <!-- Hide on small screens -->
+                    <th class="text-end d-none d-md-table-cell">Total</th>
+
+                    <th class="text-center">Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
 
-    <div class="text-end">
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.ProductName</strong>
+
+                            <!-- Show price + total on mobile -->
+                            <div class="d-md-none text-muted small mt-1">
+                                Unit: @item.UnitPrice.ToString("0.00") € <br />
+                                Total: @((item.UnitPrice * item.Quantity).ToString("0.00")) €
+                            </div>
+                        </td>
+
+                        <!-- Desktop only -->
+                        <td class="text-end d-none d-md-table-cell">
+                            @item.UnitPrice.ToString("0.00") €
+                        </td>
+
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center align-items-center gap-1">
+                                <form asp-action="Decrease" method="post">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">−</button>
+                                </form>
+
+                                <span class="mx-2">@item.Quantity</span>
+
+                                <form asp-action="Add" method="post">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
+                                </form>
+                            </div>
+                        </td>
+
+                        <!-- Desktop only -->
+                        <td class="text-end d-none d-md-table-cell">
+                            @((item.UnitPrice * item.Quantity).ToString("0.00")) €
+                        </td>
+
+                        <td class="text-center">
+                            <form asp-action="Remove" method="post">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    Remove
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-end mt-3">
         <a class="btn btn-primary"
            asp-controller="Checkout"
            asp-action="Index">
             Proceed to Checkout
         </a>
-
     </div>
 }
