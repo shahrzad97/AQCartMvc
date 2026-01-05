@@ -4,6 +4,10 @@ namespace AQCartMvc.Models
 {
     public class CheckoutInput
     {
+        // =========================
+        // USER INPUT
+        // =========================
+
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
 
@@ -13,16 +17,23 @@ namespace AQCartMvc.Models
         [Required]
         public string LastName { get; set; } = string.Empty;
 
-        public bool NeedInvoice { get; set; }
-
-        public bool AcceptPrivacy { get; set; }
-
-        // 🔹 PART C
         public string? CouponCode { get; set; }
 
-        // totals
+        public bool NeedInvoice { get; set; }
+
+        // 🔴 PRIVACY — REQUIRED
+        [Range(typeof(bool), "true", "true",
+            ErrorMessage = "You must accept the privacy policy to continue")]
+        public bool AcceptPrivacy { get; set; }
+
+        // =========================
+        // CALCULATED VALUES
+        // =========================
+
         public decimal Total { get; set; }
+
         public decimal Discount { get; set; }
+
         public decimal FinalTotal { get; set; }
     }
 }
