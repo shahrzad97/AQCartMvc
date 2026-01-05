@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AQCartMvc.Helpers;
 using AQCartMvc.Models;
-using AQCartMvc.Helpers;
+using AQCartMvc.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 
 namespace AQCartMvc.Controllers
@@ -23,7 +24,7 @@ namespace AQCartMvc.Controllers
 
             var total = cart.Sum(i => i.UnitPrice * i.Quantity);
 
-            var model = new CheckoutInput
+            var model = new CheckoutViewModel
             {
                 Total = total,
                 Discount = 0,
@@ -37,7 +38,7 @@ namespace AQCartMvc.Controllers
         // POST: Apply coupon OR Pay
         // ===============================
         [HttpPost]
-        public IActionResult CreateStripeSession(CheckoutInput model)
+        public IActionResult CreateStripeSession(CheckoutViewModel model)
         {
             var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
 
@@ -59,9 +60,11 @@ namespace AQCartMvc.Controllers
                 else
                 {
                     ModelState.AddModelError("CouponCode", "Invalid coupon code");
+
                     model.Total = total;
                     model.Discount = 0;
                     model.FinalTotal = total;
+
                     return View("Index", model);
                 }
             }
@@ -84,11 +87,11 @@ namespace AQCartMvc.Controllers
                 return View("Index", model);
             }
 
-            // ✅ STORE INVOICE REQUEST IN SESSION (NOT TempData)
-            HttpContext.Session.SetObject(INVOICE_KEY, model.NeedInvoice);
+            // ✅ STORE INVOICE REQUEST
+            HttpContext.Session.SetObject(INVOICE_KEY, model.RequestInvoice);
 
             // =========================
-            // STRIPE — USE FINAL TOTAL
+            // STRIPE
             // =========================
             var options = new SessionCreateOptions
             {
@@ -129,8 +132,6 @@ namespace AQCartMvc.Controllers
                 HttpContext.Session.GetObject<bool?>(INVOICE_KEY) ?? false;
 
             ViewBag.InvoiceRequested = invoiceRequested;
-
-            // optional: clear after use
             HttpContext.Session.Remove(INVOICE_KEY);
 
             return View();
