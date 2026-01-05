@@ -7,89 +7,62 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AQCartMvc.styles.css" asp-append-version="true" />
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-
-                <!-- Brand -->
-                <a class="navbar-brand"
-                   asp-controller="Home"
-                   asp-action="Index">
+        <nav class="navbar navbar-expand-lg site-navbar">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     AQCartMvc
                 </a>
 
-                <button class="navbar-toggler"
-                        type="button"
+                <button class="navbar-toggler" type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
+                        data-bs-target="#mainNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                        <!-- Home -->
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Home
-                            </a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-
-                        <!-- Products -->
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Products"
-                               asp-action="Index">
-                                Products
-                            </a>
+                            <a class="nav-link" asp-controller="Products" asp-action="Index">Products</a>
                         </li>
-
-                        <!-- Cart -->
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Cart"
-                               asp-action="Index">
-                                Cart
-                            </a>
+                            <a class="nav-link" asp-controller="Cart" asp-action="Index">Cart</a>
                         </li>
-
-                        <!-- Privacy -->
                         <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Privacy">
-                                Privacy
-                            </a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-
                     </ul>
+
+                    <!-- 🌗 Theme toggle -->
+                    <button id="themeToggle" class="btn btn-outline-secondary btn-sm">
+                        🌙 Dark
+                    </button>
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <!-- ✅ MAIN grows -->
+    <main role="main" class="container pb-3">
+        @RenderBody()
+    </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+
+    <footer class="footer">
+        <div class="container-fluid">
             &copy; 2025 - AQCartMvc -
             <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 

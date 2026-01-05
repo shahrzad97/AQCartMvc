@@ -8,10 +8,15 @@
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
-        Your cart is empty.
+    <div class="alert empty-cart-alert text-center">
+        <div class="fs-5 mb-2">🛒</div>
+        <strong>Your cart is empty</strong>
+        <div class="text-muted mt-1">
+            Add some products to get started.
+        </div>
     </div>
 }
+
 else
 {
     <!-- ✅ RESPONSIVE WRAPPER -->
