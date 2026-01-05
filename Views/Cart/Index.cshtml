@@ -27,12 +27,12 @@ else
                     <th>Product</th>
 
                     <!-- Hide on small screens -->
-                    <th class="text-end d-none d-md-table-cell">Unit Price</th>
+                    <th class="d-none d-md-table-cell">Unit Price</th>
 
                     <th class="text-center">Quantity</th>
 
                     <!-- Hide on small screens -->
-                    <th class="text-end d-none d-md-table-cell">Total</th>
+                    <th class="d-none d-md-table-cell">Total</th>
 
                     <th class="text-center">Actions</th>
                 </tr>
@@ -53,7 +53,7 @@ else
                         </td>
 
                         <!-- Desktop only -->
-                        <td class="text-end d-none d-md-table-cell">
+                        <td class="d-none d-md-table-cell">
                             @item.UnitPrice.ToString("0.00") €
                         </td>
 
@@ -74,7 +74,7 @@ else
                         </td>
 
                         <!-- Desktop only -->
-                        <td class="text-end d-none d-md-table-cell">
+                        <td class="d-none d-md-table-cell">
                             @((item.UnitPrice * item.Quantity).ToString("0.00")) €
                         </td>
 
