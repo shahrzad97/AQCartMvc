@@ -9,10 +9,12 @@
 
 @if (invoiceRequested)
 {
-    <div class="alert alert-info">
-        You requested an invoice for this order.
-        Our accounting department will process it.
-    </div>
+    <div class="invoice-info">
+        @(ViewBag.InvoiceRequested
+            ? "You requested an invoice for this order. Our accounting department will process it."
+            : "No invoice was requested for this order.")
+</div>
+
 }
 else
 {

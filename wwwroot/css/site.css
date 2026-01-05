@@ -147,6 +147,16 @@ hr {
     border-radius: 0.5rem;
 }
 
+/* =========================
+   MAIN CONTENT SPACING
+========================= */
+
+.main-content {
+    padding-top: 32px;
+    padding-bottom: 24px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
 
 /* ===========================
    BUTTONS
@@ -185,6 +195,27 @@ footer {
     box-shadow: 0 0 0 0.15rem rgba(13,110,253,.25);
 }
 
+/* =========================
+   INVOICE INFO BOX
+========================= */
+
+.invoice-info {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 16px 0 24px;
+    font-size: 0.95rem;
+    border: 1px solid var(--border);
+}
+
+[data-theme="light"] .invoice-info {
+    background-color: #eef6ff;
+    color: #0b3d91;
+}
+
+[data-theme="dark"] .invoice-info {
+    background-color: #1e2a36;
+    color: #cfe4ff;
+}
 /* ===========================
    STICKY FOOTER FIX
 =========================== */
