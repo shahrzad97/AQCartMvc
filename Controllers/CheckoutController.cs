@@ -73,7 +73,7 @@ namespace AQCartMvc.Controllers
             model.Discount = discount;
             model.FinalTotal = total - discount;
 
-            // 👉 APPLY COUPON ONLY
+            // APPLY COUPON ONLY
             if (Request.Form["action"] == "applyCoupon")
             {
                 return View("Index", model);
@@ -87,7 +87,7 @@ namespace AQCartMvc.Controllers
                 return View("Index", model);
             }
 
-            // ✅ STORE INVOICE REQUEST
+            // STORE INVOICE REQUEST
             HttpContext.Session.SetObject(INVOICE_KEY, model.RequestInvoice);
 
             // =========================

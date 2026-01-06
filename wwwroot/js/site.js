@@ -1,5 +1,5 @@
 ﻿// ===============================
-// THEME HANDLING (FINAL)
+// THEME HANDLING
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {

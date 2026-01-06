@@ -14,7 +14,6 @@ namespace AQCartMvc.Models
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
 
-        // Mandatory project requirements
         public bool NeedInvoice { get; set; }
         public bool AcceptPrivacy { get; set; }
 

@@ -64,7 +64,7 @@ hr {
             color: var(--accent) !important;
         }
 
-/* Hamburger icon fix */
+/* Hamburger icon*/
 .navbar-toggler {
     border-color: var(--border);
 }
@@ -92,7 +92,7 @@ hr {
     }
 
 /* ===========================
-   CHECKBOX (FIXED)
+   CHECKBOX
 =========================== */
 
 .form-check-input {
@@ -217,7 +217,7 @@ footer {
     color: #cfe4ff;
 }
 /* ===========================
-   STICKY FOOTER FIX
+   STICKY FOOTER
 =========================== */
 
 html, body {
@@ -231,7 +231,7 @@ body {
     color: var(--text);
 }
 
-/* Main content grows to push footer down */
+
 main {
     flex: 1;
 }
