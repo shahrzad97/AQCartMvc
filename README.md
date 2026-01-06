@@ -25,7 +25,7 @@ The project demonstrates a complete shopping cart workflow including product lis
 ## 🛠️ Technology Choices & Motivation
 
 ### Backend Framework — ASP.NET Core MVC
-Chosen for its clear separation of concerns and suitability for structured backend logic.
+Chosen for its clear separation of concerns and suitability for structured backend logic(version .NET 8.0).
 The application follows the **MVC (Model–View–Controller)** pattern:
 
 - **Controllers**
@@ -123,7 +123,7 @@ Git is used for full versioning. Feature branches created for isolated developme
 ## 🧪 How to Run the Project
 
 ### ✅ Prerequisites
-- .NET SDK **7.0** or newer
+- .NET SDK **8.0** or newer
 - SQL Server / SQL Server Express / LocalDB
 - Visual Studio 2022 (recommended)
 
@@ -142,7 +142,7 @@ AQCartMvc.sln
 
 3. Configure the database connection
 
-- Edit appsettings.json:
+- Edit the existing ConnectionStrings section in appsettings.json:
 
 "ConnectionStrings": {
   "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=AQCartDb;Trusted_Connection=True;"
