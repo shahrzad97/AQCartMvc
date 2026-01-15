@@ -1,77 +1,127 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AQCartMvc.ViewModels;
 using AQCartMvc.Models;
 using AQCartMvc.Helpers;
 using Stripe.Checkout;
 
-public class CheckoutController : Controller
+namespace AQCartMvc.Controllers
 {
-    private const string CART_KEY = "CART";
-
-    [HttpGet]
-    public IActionResult Index()
+    public class CheckoutController : Controller
     {
-        var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
+        private const string CART_KEY = "CART";
 
-        if (cart == null || !cart.Any())
-            return RedirectToAction("Index", "Cart");
-
-        var model = new CheckoutInput
+        // ===============================
+        // GET: Checkout
+        // ===============================
+        [HttpGet]
+        public IActionResult Index()
         {
-            Total = cart.Sum(i => i.UnitPrice * i.Quantity)
-        };
+            var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
 
-        return View(model);
-    }
+            if (cart == null || !cart.Any())
+                return RedirectToAction("Index", "Cart");
 
-    // ✅ THIS is the ONLY submit action
-    [HttpPost]
-    public IActionResult CreateStripeSession(CheckoutInput model)
-    {
-        var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
+            var total = cart.Sum(i => i.UnitPrice * i.Quantity);
 
-        if (cart == null || !cart.Any())
-            return RedirectToAction("Index", "Cart");
+            var model = new CheckoutInput
+            {
+                Total = total,
+                Discount = 0,
+                FinalTotal = total
+            };
 
-        // 🔴 IMPORTANT: validation FIRST
-        if (!ModelState.IsValid)
-        {
-            model.Total = cart.Sum(i => i.UnitPrice * i.Quantity);
-            return View("Index", model); // back to checkout page
+            return View(model);
         }
 
         // ===============================
-        // STRIPE SESSION (sandbox)
+        // POST: Apply coupon OR Pay
         // ===============================
-        var options = new SessionCreateOptions
+        [HttpPost]
+        public IActionResult CreateStripeSession(CheckoutInput model)
         {
-            PaymentMethodTypes = new List<string> { "card" },
-            LineItems = cart.Select(item => new SessionLineItemOptions
+            var cart = HttpContext.Session.GetObject<List<CartItem>>(CART_KEY);
+
+            if (cart == null || !cart.Any())
+                return RedirectToAction("Index", "Cart");
+
+            decimal total = cart.Sum(i => i.UnitPrice * i.Quantity);
+            decimal discount = 0;
+
+            // =========================
+            // COUPON LOGIC
+            // =========================
+            if (!string.IsNullOrWhiteSpace(model.CouponCode))
             {
-                Quantity = item.Quantity,
-                PriceData = new SessionLineItemPriceDataOptions
+                if (model.CouponCode.Trim().ToUpper() == "SAVE10")
                 {
-                    Currency = "eur",
-                    UnitAmount = (long)(item.UnitPrice * 100),
-                    ProductData = new SessionLineItemPriceDataProductDataOptions
-                    {
-                        Name = item.ProductName
-                    }
+                    discount = total * 0.10m;
                 }
-            }).ToList(),
-            Mode = "payment",
-            SuccessUrl = Url.Action("Success", "Checkout", null, Request.Scheme),
-            CancelUrl = Url.Action("Index", "Checkout", null, Request.Scheme)
-        };
+                else
+                {
+                    ModelState.AddModelError("CouponCode", "Invalid coupon code");
+                    model.Total = total;
+                    model.Discount = 0;
+                    model.FinalTotal = total;
+                    return View("Index", model);
+                }
+            }
 
-        var service = new SessionService();
-        Session session = service.Create(options);
+            model.Total = total;
+            model.Discount = discount;
+            model.FinalTotal = total - discount;
 
-        return Redirect(session.Url);
-    }
+            // 👉 Apply coupon only (no Stripe yet)
+            if (Request.Form["action"] == "applyCoupon")
+            {
+                return View("Index", model);
+            }
 
-    public IActionResult Success()
-    {
-        return View();
+            // =========================
+            // FINAL VALIDATION
+            // =========================
+            if (!ModelState.IsValid)
+            {
+                return View("Index", model);
+            }
+
+            // =========================
+            // STRIPE — USE FINAL TOTAL
+            // =========================
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        Quantity = 1,
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            Currency = "eur",
+                            UnitAmount = (long)(model.FinalTotal * 100),
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = "Order total"
+                            }
+                        }
+                    }
+                },
+                Mode = "payment",
+                SuccessUrl = Url.Action("Success", "Checkout", null, Request.Scheme),
+                CancelUrl = Url.Action("Index", "Checkout", null, Request.Scheme)
+            };
+
+            var service = new SessionService();
+            var session = service.Create(options);
+
+            return Redirect(session.Url);
+        }
+
+        // ===============================
+        // SUCCESS
+        // ===============================
+        public IActionResult Success()
+        {
+            return View();
+        }
     }
 }
