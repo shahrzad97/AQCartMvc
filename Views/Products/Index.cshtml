@@ -8,16 +8,18 @@
 
 @if (!Model.Any())
 {
-    <p>No products available.</p>
+    <div class="alert alert-info">
+        No products available.
+    </div>
 }
 else
 {
-    <table class="table table-bordered">
+    <table class="table table-bordered align-middle">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Price (€)</th>
-                <th></th>
+                <th class="price-col">Price (€)</th>
+                <th class="action-col text-center">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -25,18 +27,17 @@ else
             {
                 <tr>
                     <td>@product.Name</td>
-                    <td>@product.Price.ToString("0.00")</td>
-                    <td>
+                    <td class="price-col">@product.Price.ToString("0.00")</td>
+                    <td class="action-col text-center">
                         <form asp-controller="Cart"
                               asp-action="Add"
                               method="post"
-                              style="display:inline;">
+                              class="d-inline">
                             <input type="hidden" name="productId" value="@product.Id" />
                             <button type="submit" class="btn btn-sm btn-primary">
                                 Add to cart
                             </button>
                         </form>
-
                     </td>
                 </tr>
             }

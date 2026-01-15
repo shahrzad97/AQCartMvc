@@ -15,7 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-// ✅ SESSION (THIS WAS MISSING)
+// SESSION
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -39,7 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// ✅ ENABLE SESSION (ORDER MATTERS)
+// ENABLE SESSION (ORDER MATTERS)
 app.UseSession();
 
 app.UseAuthorization();

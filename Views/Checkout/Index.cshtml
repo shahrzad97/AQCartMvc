@@ -1,4 +1,4 @@
-﻿@model AQCartMvc.Models.CheckoutInput
+﻿@model AQCartMvc.ViewModels.CheckoutViewModel
 
 @{
     ViewData["Title"] = "Checkout";
@@ -43,7 +43,7 @@
 
 
     <div class="form-check mb-2">
-        <input asp-for="NeedInvoice" class="form-check-input" />
+        <input asp-for="RequestInvoice" class="form-check-input" />
         <label class="form-check-label">
             Request receipt (invoice)
         </label>

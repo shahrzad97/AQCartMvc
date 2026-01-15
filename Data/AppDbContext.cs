@@ -52,7 +52,7 @@ namespace AQCartMvc.Data
                 .Property(oi => oi.RowTotal)
                 .HasPrecision(18, 2);
 
-            // 🔹 SEED PRODUCTS
+            // SEED PRODUCTS
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {

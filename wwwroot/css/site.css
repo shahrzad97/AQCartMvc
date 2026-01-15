@@ -1,22 +1,242 @@
-html {
-  font-size: 14px;
+/* ===========================
+   THEME VARIABLES
+=========================== */
+
+:root {
+    --bg: #ffffff;
+    --text: #212529;
+    --border: #dee2e6;
+    --card: #ffffff;
+    --input-bg: #ffffff;
+    --input-text: #212529;
+    --accent: #0d6efd;
+    --empty-bg: #f1f5ff;
+    --table-bg: #f8f9fb;
+    --table-head-bg: #eef2f7;
+    --nav-bg: #f8f9fa;
+    --footer-bg: #f8f9fa;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+[data-theme="dark"] {
+    --bg: #0d0d0d;
+    --text: #f1f1f1;
+    --border: #333;
+    --card: #121212;
+    --input-bg: #000;
+    --input-text: #ffffff;
+    --accent: #0d6efd;
+    --empty-bg: #161a22;
+    --table-bg: #151515;
+    --table-head-bg: #1e1e1e;
+    --nav-bg: #121212;
+    --footer-bg: #121212;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* ===========================
+   GLOBAL
+=========================== */
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+hr {
+    border-color: var(--border);
+}
+
+/* ===========================
+   NAVBAR
+=========================== */
+
+.site-navbar {
+    background-color: var(--nav-bg) !important;
+    border-bottom: 1px solid var(--border);
+}
+
+    .site-navbar .nav-link,
+    .site-navbar .navbar-brand {
+        color: var(--text) !important;
+    }
+
+
+        .site-navbar .nav-link:hover {
+            color: var(--accent) !important;
+        }
+
+/* Hamburger icon*/
+.navbar-toggler {
+    border-color: var(--border);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(0,0,0,0.7)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,0.9)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* ===========================
+   FORMS
+=========================== */
+
+.form-control {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-color: var(--border);
+}
+
+    .form-control::placeholder {
+        color: #888;
+    }
+
+/* ===========================
+   CHECKBOX
+=========================== */
+
+.form-check-input {
+    appearance: auto;
+    accent-color: var(--accent);
+}
+
+/* ===========================
+   TABLES
+=========================== */
+
+.table {
+    background-color: var(--card);
+    color: var(--text);
+}
+
+    .table thead th {
+        background-color: rgba(0, 0, 0, 0.03);
+        color: var(--text);
+    }
+
+[data-theme="dark"] .table thead th {
+    background-color: #1a1a1a;
+}
+
+.table td,
+.table th {
+    color: var(--text);
+    border-color: var(--border);
+}
+
+
+/* ===========================
+   ALERTS
+=========================== */
+
+.alert {
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+/* ===========================
+   EMPTY CART STATE
+=========================== */
+
+.empty-cart-alert {
+    background-color: var(--empty-bg);
+    border: 1px dashed var(--border);
+    color: var(--text);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+}
+
+/* =========================
+   MAIN CONTENT SPACING
+========================= */
+
+.main-content {
+    padding-top: 32px;
+    padding-bottom: 24px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+
+.btn-primary {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+
+footer {
+    background-color: var(--footer-bg);
+    border-top: 1px solid var(--border);
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+
+    footer .container {
+        text-align: center;
+        max-width: 100%;
+    }
+
+/* ===========================
+   BOOTSTRAP FIXES
+=========================== */
+
+.btn:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.15rem rgba(13,110,253,.25);
+}
+
+/* =========================
+   INVOICE INFO BOX
+========================= */
+
+.invoice-info {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 16px 0 24px;
+    font-size: 0.95rem;
+    border: 1px solid var(--border);
+}
+
+[data-theme="light"] .invoice-info {
+    background-color: #eef6ff;
+    color: #0b3d91;
+}
+
+[data-theme="dark"] .invoice-info {
+    background-color: #1e2a36;
+    color: #cfe4ff;
+}
+/* ===========================
+   STICKY FOOTER
+=========================== */
+
+html, body {
+    height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+
+main {
+    flex: 1;
+}
+
+
+footer {
+    margin-top: auto;
 }
